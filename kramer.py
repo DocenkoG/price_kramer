@@ -401,18 +401,7 @@ def processing(cfgFName):
         #os.system( 'marvel_converter_xlsx.xlsm')
         #convert_csv2csv(cfg)
         convert_excel2csv(cfg)
-    if os.name == 'nt' :
-        folderName = os.path.basename(os.getcwd())
-        #foutRUR = filename_out[:-4]+'_RUR'+filename_out[-4:]
-        #foutEUR = filename_out[:-4]+'_EUR'+filename_out[-4:]
-        foutUSD = filename_out[:-4]+'_USD'+filename_out[-4:]
 
-        #if os.path.exists(foutRUR)  : shutil.copy2(foutRUR , 'c://AV_PROM/prices/' + folderName +'/'+foutRUR)
-        #if os.path.exists(foutEUR)  : shutil.copy2(foutEUR , 'c://AV_PROM/prices/' + folderName +'/'+foutEUR)
-        if os.path.exists(foutUSD)  : shutil.copy2(foutUSD , 'c://AV_PROM/prices/' + folderName +'/'+foutUSD)
-        if os.path.exists('python.log')  : shutil.copy2('python.log',  'c://AV_PROM/prices/' + folderName +'/python.log')
-        if os.path.exists('python.log.1'): shutil.copy2('python.log.1','c://AV_PROM/prices/' + folderName +'/python.log.1')
-    
 
 
 def main( dealerName):
