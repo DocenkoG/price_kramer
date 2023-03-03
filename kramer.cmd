@@ -1,5 +1,3 @@
-chcp 1251
+python.exe kramer.py
 
-"c:\Program Files\Python35\python.exe" kramer.py
-
-rem pause
+ pause
