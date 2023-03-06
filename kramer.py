@@ -14,7 +14,6 @@ import csv
 import requests, lxml.html
 
 
-
 def nameToId(value) :
     result = ''
     for ch in value:
@@ -31,7 +30,6 @@ def nameToId(value) :
         result = result[:13] + result[point-12:point+13] + result[-12: ]
     
     return result
-
 
 
 def getXlsString(sh, i, in_columns_j):
@@ -51,7 +49,6 @@ def getXlsString(sh, i, in_columns_j):
     return impValues
 
 
-
 def getXlsxString(sh, i, in_columns_j):
     impValues = {}
     for item in in_columns_j.keys() :
@@ -67,7 +64,6 @@ def getXlsxString(sh, i, in_columns_j):
         else:
             impValues[item] = getCellXlsx(row=i, col=j, isDigit='N', sheet=sh)
     return impValues
-
 
 
 def convert_excel2csv(cfg):
@@ -181,6 +177,7 @@ def convert_excel2csv(cfg):
 
 def download( cfg ):
     from selenium import webdriver
+    from selenium.webdriver.common.by import By
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.remote.remote_connection import LOGGER
     LOGGER.setLevel(logging.WARNING)
@@ -188,10 +185,11 @@ def download( cfg ):
     retCode     = False
     filename_new= cfg.get('download','filename_new')
     filename_old= cfg.get('download','filename_old')
-    login       = cfg.get('download','login'    )
-    password    = cfg.get('download','password' )
+    #login       = cfg.get('download','login'    )
+    #password    = cfg.get('download','password' )
     url_lk      = cfg.get('download','url_lk'   )
-    url_file    = cfg.get('download','url_file' )
+    #url_file    = cfg.get('download','url_file' )
+    partial_txt = cfg.get('download','partial_txt' )
 
     download_path= os.path.join(os.getcwd(), 'tmp')
     if not os.path.exists(download_path):
@@ -263,26 +261,24 @@ def download( cfg ):
                 ",application/xv+xml" +
                 ",application/excel")
         if os.name == 'posix':
-            driver = webdriver.Firefox(ffprofile, executable_path=r'/usr/local/Cellar/geckodriver/0.21.0/bin/geckodriver')
+            driver = webdriver.Firefox(ffprofile, executable_path=r'/usr/local/Cellar/geckodriver/0.26.0/bin/geckodriver')
         elif os.name == 'nt':
             driver = webdriver.Firefox(ffprofile)
         driver.implicitly_wait(30)
         
         driver.get(url_lk)
         time.sleep(1)
-#        driver.find_element_by_name("USER_LOGIN").click()
-#        driver.find_element_by_name("USER_LOGIN").clear()
-#        driver.find_element_by_name("USER_LOGIN").send_keys(login)
-#        driver.find_element_by_name("USER_PASSWORD").clear()
-#        driver.find_element_by_name("USER_PASSWORD").send_keys(password)
-#        driver.find_element_by_name("Login").click()
-#        time.sleep(4)
-        #driver.find_element_by_link_text(u"Скачать в формате .xlsx ▼").click()
-        #time.sleep(22)
-        driver.find_element_by_xpath(url_file).click()
+        #driver.find_element_by_name("USER_LOGIN").click()
+        #driver.find_element_by_name("USER_LOGIN").clear()
+        #driver.find_element_by_name("USER_LOGIN").send_keys(login)
+        #driver.find_element_by_name("USER_PASSWORD").clear()
+        #driver.find_element_by_name("USER_PASSWORD").send_keys(password)
+        #driver.find_element_by_name("Login").click()
+        #time.sleep(4)
+
+        driver.find_element(By.PARTIAL_LINK_TEXT, partial_txt).click()
         time.sleep(4)
         driver.quit()
-
 
 
     except Exception as e:
@@ -362,7 +358,6 @@ def config_read( cfgFName ):
     return cfg
 
 
-
 def is_file_fresh(fileName, qty_days):
     qty_seconds = qty_days *24*60*60 
     if os.path.exists( fileName):
@@ -379,12 +374,10 @@ def is_file_fresh(fileName, qty_days):
         return True
 
 
-
 def make_loger():
     global log
     logging.config.fileConfig('logging.cfg')
     log = logging.getLogger('logFile')
-
 
 
 def processing(cfgFName):
@@ -403,7 +396,6 @@ def processing(cfgFName):
         convert_excel2csv(cfg)
 
 
-
 def main( dealerName):
     """ Обработка прайсов выполняется согласно файлов конфигурации.
     Для этого в текущей папке должны быть файлы конфигурации, описывающие
@@ -415,7 +407,6 @@ def main( dealerName):
     for cfgFName in os.listdir("."):
         if cfgFName.startswith("cfg") and cfgFName.endswith(".cfg"):
             processing(cfgFName)
-
 
 
 if __name__ == '__main__':
