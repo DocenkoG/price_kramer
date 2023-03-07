@@ -1,3 +1,3 @@
 python.exe kramer.py
 
- pause
+rem pause
